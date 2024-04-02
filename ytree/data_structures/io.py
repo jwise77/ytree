@@ -184,7 +184,12 @@ class TreeFieldIO(FieldIO):
         units = fi.get('units', '')
         dtype = fi.get('dtype', self.default_dtype)
         value = fi.get('default', 0)
-        data = np.full(storage_object.tree_size, value, dtype=dtype)
+        array = fi.get('array', False)
+        if array:
+            # List of objects, so we can have variable length (i.e. ragged) arrays for each node
+            data = np.empty(storage_object.tree_size, object)
+        else:
+            data = np.full(storage_object.tree_size, value, dtype=dtype)
         if units:
             data = self.arbor.arr(data, units)
         storage_object.field_data[name] = data
@@ -244,9 +249,13 @@ class DefaultRootFieldIO(FieldIO):
         default = fi['default']
         dtype   = fi['dtype']
         units   = fi['units']
+        array   = fi['array']
 
-        storage_object.field_data[name] = \
-          self.arbor.arr(np.full(self.arbor.size, default, dtype=dtype), units)
+        if array:
+            storage_object.field_data[name] = np.empty(self.arbor.size, object)
+        else:
+            storage_object.field_data[name] = \
+                self.arbor.arr(np.full(self.arbor.size, default, dtype=dtype), units)
 
     def _read_fields(self, storage_object, fields, dtypes=None,
                      root_only=True):

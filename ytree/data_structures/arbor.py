@@ -821,7 +821,7 @@ class Arbor(metaclass=RegisteredArbor):
 
         pbar.finish()
 
-    def add_analysis_field(self, name, units, dtype=None, default=0):
+    def add_analysis_field(self, name, units, dtype=None, array=False, default=0):
         r"""
         Add an empty field to be filled by analysis operations.
 
@@ -835,6 +835,10 @@ class Arbor(metaclass=RegisteredArbor):
             Data type for field values. If None, the default data type
             of the arbor is used.
             Default: None.
+        array : optional, boolean
+            Flag to indicate that the fields are arrays and can have different 
+            lengths in each node.
+            Default: False.
         default: optional, numeric
             Default field value when field is initialized.
             Default: 0.
@@ -852,7 +856,7 @@ class Arbor(metaclass=RegisteredArbor):
 
         self.field_info.add_analysis_field(
             name, units,
-            dtype=dtype, default=default)
+            dtype=dtype, array=array, default=default)
 
     def add_alias_field(self, alias, field, units=None,
                         force_add=True):

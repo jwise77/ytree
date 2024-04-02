@@ -68,7 +68,8 @@ class FieldInfoContainer(dict):
             if funits is None:
                 self[field]["units"] = units
 
-    def add_analysis_field(self, name, units, dtype=None, default=0):
+    def add_analysis_field(self, name, units, dtype=None, array=False,
+                           default=0):
         """
         Add an analysis field.
         """
@@ -82,6 +83,7 @@ class FieldInfoContainer(dict):
         self.arbor.analysis_field_list.append(name)
         self[name] = {"type": "analysis",
                       "default": default,
+                      "array": array,
                       "dtype": dtype,
                       "units": units}
 
@@ -144,7 +146,7 @@ class FieldInfoContainer(dict):
 
     def add_derived_field(self, name, function,
                           units=None, dtype=None, description=None,
-                          vector_field=False, force_add=True):
+                          vector_field=False, array=False, force_add=True):
         """
         Add a derived field.
         """
@@ -172,6 +174,7 @@ class FieldInfoContainer(dict):
                 "function": function,
                 "units": units,
                 "dtype": dtype,
+                "array": array,
                 "vector_field": vector_field,
                 "description": description}
 
